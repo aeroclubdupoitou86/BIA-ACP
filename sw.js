@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bia-acp-v7';
+const CACHE_NAME = 'bia-acp-v11';
 const ASSETS = [
   './',
   './index.html',
@@ -24,15 +24,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request).then((response) => {
-        if (response) return response;
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
