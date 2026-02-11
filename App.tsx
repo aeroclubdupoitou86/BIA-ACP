@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Agenda from './components/Agenda';
-import Actus from './components/Actus';
-import Cours from './components/Cours';
-import Contact from './components/Contact';
-import Aide from './components/Aide';
+import Navbar from './components/Navbar.tsx';
+import Agenda from './components/Agenda.tsx';
+import Actus from './components/Actus.tsx';
+import Cours from './components/Cours.tsx';
+import Contact from './components/Contact.tsx';
+import Aide from './components/Aide.tsx';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('actus');

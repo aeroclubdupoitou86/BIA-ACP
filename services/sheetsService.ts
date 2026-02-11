@@ -1,4 +1,4 @@
-import { Lesson } from '../types';
+import { Lesson } from '../types.ts';
 
 const SHEET_ID = '1r4UEhDB27-5F23UbGx_SreFTODg114vQQOzjjm29Yjg';
 const GID = '986104196';
