@@ -2,6 +2,9 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "handle": "filesystem"
+    },
+    {
       "source": "/((?!.*\\.[a-z0-9]+$).*)",
       "destination": "/index.html"
     }
