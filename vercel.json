@@ -1,8 +1,7 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!.*\\.(?:js|jsx|ts|tsx|css|svg|png|jpg|jpeg|gif|ico|json|woff|woff2|ttf|otf)).*)",
+      "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
     }
   ]
