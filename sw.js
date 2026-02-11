@@ -1,11 +1,9 @@
-const CACHE_NAME = 'bia-acp-v2';
+const CACHE_NAME = 'bia-acp-v3';
 const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/logo.svg',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  '/logo.svg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -24,6 +22,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // On ne traite que les requêtes vers notre propre domaine
+  if (!event.request.url.startsWith(self.location.origin)) return;
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request).catch(() => {

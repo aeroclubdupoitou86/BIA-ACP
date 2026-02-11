@@ -1,28 +1,9 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!.*\\.).*)",
+      "source": "/((?!.*\\.(?:js|jsx|ts|tsx|css|svg|png|jpg|jpeg|gif|ico|json|woff|woff2|ttf|otf)).*)",
       "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*).tsx",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).ts",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
     }
   ]
 }
