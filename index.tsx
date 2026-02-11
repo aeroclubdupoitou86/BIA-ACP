@@ -1,30 +1,26 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-console.log("🚀 [BIA-ACP] Moteur React démarré.");
+console.log("✈️ [BIA-ACP] Moteur de rendu démarré...");
 
-const rootEl = document.getElementById('root');
-if (rootEl) {
-  try {
-    const root = createRoot(rootEl);
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
-    console.log("✅ [BIA-ACP] Interface affichée avec succès.");
-  } catch (error) {
-    console.error("❌ [BIA-ACP] Erreur de rendu :", error);
-  }
-} else {
-  console.error("❌ [BIA-ACP] Élément #root introuvable !");
+const container = document.getElementById('root');
+if (container) {
+    try {
+        const root = createRoot(container);
+        root.render(<App />);
+        console.log("✅ [BIA-ACP] Interface injectée.");
+    } catch (err) {
+        console.error("❌ [BIA-ACP] Erreur au rendu React:", err);
+    }
 }
 
+// Désactivation des Service Workers pour éviter les problèmes de cache
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(() => console.log('📡 [BIA-ACP] Service Worker opérationnel.'))
-      .catch(err => console.log('⚠️ [BIA-ACP] SW non activé:', err));
-  });
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+            registration.unregister();
+            console.log("🧹 [BIA-ACP] Cache nettoyé.");
+        }
+    });
 }
