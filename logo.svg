@@ -1,0 +1,60 @@
+
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Dégradé radial pour le fond bleu -->
+    <radialGradient id="skyGradient" cx="256" cy="256" r="250" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </radialGradient>
+    
+    <!-- Dégradé métallique pour le bord -->
+    <linearGradient id="silverGradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+
+    <!-- Ombre portée -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Anneau extérieur argenté -->
+  <circle cx="256" cy="256" r="248" fill="url(#silverGradient)" stroke="#475569" stroke-width="2"/>
+  <circle cx="256" cy="256" r="236" fill="url(#skyGradient)" stroke="white" stroke-width="4" stroke-opacity="0.8"/>
+
+  <!-- Texte BIA stylisé -->
+  <text x="256" y="190" text-anchor="middle" font-family="Arial, serif" font-weight="900" font-size="120" fill="white" fill-opacity="0.9" filter="url(#shadow)">BIA</text>
+
+  <!-- Silhouette Avion Argentée -->
+  <g transform="translate(145, 260) scale(0.6)" fill="#cbd5e1" filter="url(#shadow)">
+    <!-- Corps de l'avion -->
+    <path d="M0 80 Q150 0 350 70 L380 60 Q400 80 380 100 L350 90 Q150 160 0 80Z" />
+    <!-- Aile -->
+    <path d="M150 85 L250 140 L280 130 L180 80 Z" />
+    <!-- Hélice -->
+    <rect x="375" y="30" width="8" height="100" rx="4" fill="#94a3b8"/>
+    
+    <!-- LIVRE sur l'avion -->
+    <path d="M160 30 Q200 0 240 30 Q280 0 320 30 L320 70 Q280 40 240 70 Q200 40 160 70 Z" fill="white" stroke="#1e3a8a" stroke-width="2"/>
+    <line x1="240" y1="30" x2="240" y2="70" stroke="#1e3a8a" stroke-width="2"/>
+  </g>
+
+  <!-- Texte Aéroclub du Poitou en courbe -->
+  <path id="textCurve" d="M100 380 Q256 500 412 380" fill="none" />
+  <text font-family="Arial, sans-serif" font-weight="bold" font-size="34" fill="white">
+    <textPath href="#textCurve" startOffset="50%" text-anchor="middle">Aéroclub du Poitou</textPath>
+  </text>
+
+  <!-- Nuages stylisés au bas -->
+  <path d="M140 450 Q160 420 200 435 Q230 410 270 430 Q300 405 340 430 Q370 440 380 460 L140 460 Z" fill="white" fill-opacity="0.9" />
+</svg>

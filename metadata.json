@@ -1,0 +1,7 @@
+{
+  "name": "BIA ACP",
+  "description": "Une plateforme complète pour les élèves du Brevet d'Initiation Aéronautique (BIA) : agenda synchronisé, assistant IA spécialisé, inscriptions et contacts.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
