@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bia-acp-v15';
+const CACHE_NAME = 'bia-acp-v16';
 const ASSETS = [
   '/',
   '/index.html',
