@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bia-acp-v4';
+const CACHE_NAME = 'bia-acp-v7';
 const ASSETS = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ self.addEventListener('activate', (event) => {
       keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
     ))
   );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
