@@ -1,9 +1,19 @@
 {
+  "version": 2,
   "cleanUrls": true,
+  "framework": null,
   "rewrites": [
     {
-      "source": "/(logo\\.svg|manifest\\.json|sw\\.js|index\\.tsx|App\\.tsx)",
-      "destination": "/$1"
+      "source": "/logo.svg",
+      "destination": "/logo.svg"
+    },
+    {
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
+    },
+    {
+      "source": "/sw.js",
+      "destination": "/sw.js"
     },
     {
       "source": "/((?!.*\\.).*)",

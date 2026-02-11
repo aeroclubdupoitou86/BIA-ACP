@@ -1,9 +1,9 @@
-const CACHE_NAME = 'bia-acp-v12';
+const CACHE_NAME = 'bia-acp-v13';
 const ASSETS = [
-  './',
-  'index.html',
-  'manifest.json',
-  'logo.svg'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/logo.svg'
 ];
 
 self.addEventListener('install', (event) => {
