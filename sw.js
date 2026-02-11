@@ -1,9 +1,9 @@
-const CACHE_NAME = 'bia-acp-v3';
+const CACHE_NAME = 'bia-acp-v4';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/logo.svg'
+  './',
+  './index.html',
+  './manifest.json',
+  './logo.svg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -22,14 +22,14 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // On ne traite que les requêtes vers notre propre domaine
-  if (!event.request.url.startsWith(self.location.origin)) return;
-
+  if (event.request.method !== 'GET') return;
+  
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).catch(() => {
+    fetch(event.request).catch(() => {
+      return caches.match(event.request).then((response) => {
+        if (response) return response;
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         }
       });
     })

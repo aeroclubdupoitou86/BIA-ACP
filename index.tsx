@@ -2,9 +2,12 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 
+console.log("BIA ACP: Engine starting...");
+
 const rootEl = document.getElementById('root');
 if (rootEl) {
-  createRoot(rootEl).render(<App />);
+  const root = createRoot(rootEl);
+  root.render(<App />);
 }
 
 if ('serviceWorker' in navigator) {
