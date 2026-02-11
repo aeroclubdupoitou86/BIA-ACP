@@ -2,6 +2,10 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/(logo\\.svg|manifest\\.json|index\\.tsx|sw\\.js)",
+      "destination": "/$1"
+    },
+    {
       "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
     }
