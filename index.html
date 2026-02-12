@@ -19,15 +19,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* Masquage des barres de défilement */
         * {
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
         }
         *::-webkit-scrollbar {
             display: none !important;
-            width: 0 !important;
-            height: 0 !important;
         }
         html, body { 
             background-color: #f8fafc; 
@@ -59,7 +56,16 @@
     <script>
         // Polyfill pour process.env requis par Gemini
         window.process = { env: { API_KEY: "" } };
-        console.log("🚀 [BIA-ACP] Interface prête, démarrage du moteur...");
+        
+        // Capture des erreurs au chargement
+        window.addEventListener('error', function(e) {
+            console.error("🚨 Erreur détectée au chargement:", e.message);
+            if (e.message.includes('import')) {
+                const root = document.getElementById('root');
+                if (root) root.innerHTML = '<div style="padding:20px;text-align:center;">Erreur de chargement des modules. Veuillez rafraîchir.</div>';
+            }
+        });
+        console.log("🚀 [BIA-ACP] Moteur en attente de index.tsx...");
     </script>
 </head>
 <body>

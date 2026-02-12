@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-console.log("✈️ [BIA-ACP] Initialisation de index.tsx");
+console.log("✈️ [BIA-ACP] index.tsx chargé avec succès");
 
 const startApp = () => {
   const container = document.getElementById('root');
@@ -12,24 +12,24 @@ const startApp = () => {
   }
 
   try {
-    console.log("🛠️ [BIA-ACP] Montage de l'application...");
+    console.log("🛠️ [BIA-ACP] Tentative de montage React...");
     const root = createRoot(container);
     root.render(
       <React.StrictMode>
         <App />
       </React.StrictMode>
     );
-    console.log("✅ [BIA-ACP] Systèmes opérationnels.");
+    console.log("✅ [BIA-ACP] Application montée. Décollage réussi !");
   } catch (err) {
-    console.error("❌ [BIA-ACP] Échec critique au décollage:", err);
+    console.error("❌ [BIA-ACP] Erreur lors du rendu React:", err);
     container.innerHTML = `<div style="padding:40px; text-align:center; font-family:sans-serif;">
-      <h2 style="color:#ef4444;">Panne de démarrage</h2>
-      <p style="color:#64748b;">Une erreur technique empêche l'application de s'afficher.</p>
+      <h2 style="color:#ef4444;">Panne système</h2>
+      <p style="color:#64748b;">${err instanceof Error ? err.message : 'Une erreur inconnue est survenue.'}</p>
     </div>`;
   }
 };
 
-// Exécution immédiate ou sur événement
+// Exécution propre
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   startApp();
 } else {
