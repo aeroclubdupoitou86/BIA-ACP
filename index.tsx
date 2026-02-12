@@ -2,17 +2,18 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
+console.log("✈️ [BIA-ACP] index.tsx : Allumage des calculateurs...");
+
 const container = document.getElementById('root');
 
 if (container) {
-  console.log("🛠️ [BIA-ACP] Initialisation du root React...");
   const root = createRoot(container);
   root.render(
     <React.StrictMode>
       <App />
     </React.StrictMode>
   );
-  console.log("✅ [BIA-ACP] Application démarrée.");
+  console.log("✅ [BIA-ACP] Cockpit prêt pour le décollage.");
 } else {
-  console.error("❌ [BIA-ACP] Conteneur #root introuvable.");
+  console.error("❌ [BIA-ACP] Erreur critique : le conteneur #root est introuvable.");
 }
