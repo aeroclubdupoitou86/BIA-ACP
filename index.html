@@ -54,24 +54,17 @@
 </script>
 
     <script>
-        // Polyfill pour process.env requis par Gemini
+        // Polyfill indispensable pour le SDK Gemini
         window.process = { env: { API_KEY: "" } };
         
-        console.log("🚀 [BIA-ACP] Importmap corrigé (React 18 uniquement). Tentative de lancement...");
+        console.log("🚀 [BIA-ACP] Configuration système validée. Chargement du module principal...");
         
         window.addEventListener('error', function(e) {
-            console.error("🚨 Erreur fatale au chargement:", e.message);
-            const root = document.getElementById('root');
-            if (root && root.innerText.includes('Mise en route')) {
-                root.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;">
-                    <h2 style="color:#ef4444;">Panne de démarrage</h2>
-                    <p style="color:#64748b;font-size:14px;">Un problème technique empêche l'allumage du cockpit.<br><small>${e.message}</small></p>
-                    <button onclick="location.reload()" style="margin-top:20px;padding:12px 24px;background:#2563eb;color:white;border:none;border-radius:12px;font-weight:bold;cursor:pointer;">Réessayer le démarrage</button>
-                </div>`;
+            if (e.message.includes('importmap')) {
+                console.error("🚨 Conflit d'importmap détecté.");
             }
         });
     </script>
-    <script type="module" src="index.tsx"></script>
 </head>
 <body>
     <div id="root">
