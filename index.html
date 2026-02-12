@@ -22,21 +22,24 @@
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .plane-loading { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .plane-takeoff { animation: takeoff 0.5s ease-out forwards; }
+        @keyframes takeoff { from { transform: translate(-10px, 10px) scale(0.8); opacity: 0; } to { transform: translate(0, 0) scale(1); opacity: 1; } }
     </style>
 
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime",
-    "@google/genai": "https://esm.sh/@google/genai@1.40.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.3.1",
+        "react/": "https://esm.sh/react@18.3.1/",
+        "react-dom": "https://esm.sh/react-dom@18.3.1",
+        "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+        "@google/genai": "https://esm.sh/@google/genai@1.40.0"
+      }
+    }
+    </script>
 </head>
 <body>
     <div id="root">
@@ -44,51 +47,14 @@
             <div class="plane-loading mb-6">
                 <i class="fa-solid fa-plane-up text-5xl text-blue-600"></i>
             </div>
-            <p id="loading-status" class="font-black text-[10px] uppercase tracking-[0.2em]">Chargement des instruments...</p>
-            
-            <!-- Zone de diagnostic masquée par défaut -->
-            <div id="error-diag" class="hidden mt-8 p-4 bg-red-50 border border-red-100 rounded-2xl max-w-xs mx-auto text-left animate-fade-in">
-                <p class="text-red-600 font-bold text-[10px] mb-2 uppercase tracking-wider">Erreur de liaison satellite :</p>
-                <p id="error-msg" class="text-[9px] font-mono text-red-500 break-words leading-relaxed"></p>
-                <button onclick="window.location.reload()" class="mt-4 w-full bg-slate-900 text-white py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-transform">Redémarrer</button>
-            </div>
+            <p class="font-black text-[10px] uppercase tracking-[0.2em]">Chargement des instruments...</p>
         </div>
     </div>
 
-    <!-- Moteur de chargement esm.sh -->
+    <!-- Moteur de chargement universel -->
     <script type="module" src="https://esm.sh/run" crossorigin></script>
-
-    <!-- Script de démarrage -->
-    <script type="text/tsx">
-        import React from 'react';
-        import { createRoot } from 'react-dom/client';
-        import App from './App.tsx';
-
-        const status = document.getElementById('loading-status');
-        const diag = document.getElementById('error-diag');
-        const msg = document.getElementById('error-msg');
-
-        try {
-            if (status) status.innerText = "Initialisation du cockpit...";
-            
-            const container = document.getElementById('root');
-            if (!container) throw new Error("Conteneur root introuvable");
-
-            const root = createRoot(container);
-            root.render(
-                <React.StrictMode>
-                    <App />
-                </React.StrictMode>
-            );
-            console.log("✈️ [BIA-ACP] Vol autorisé. Systèmes OK.");
-        } catch (e) {
-            console.error("Crash au démarrage:", e);
-            if (status) status.innerText = "Panne système détectée";
-            if (diag && msg) {
-                diag.classList.remove('hidden');
-                msg.innerText = e.message || String(e);
-            }
-        }
-    </script>
+    
+    <!-- Point d'entrée de l'application -->
+    <script type="text/tsx" src="index.tsx"></script>
 </body>
 </html>
