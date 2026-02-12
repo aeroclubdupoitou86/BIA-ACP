@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
 const startApp = () => {
   const container = document.getElementById('root');
@@ -8,13 +8,18 @@ const startApp = () => {
 
   try {
     const root = createRoot(container);
-    root.render(<App />);
-    console.log("✈️ [BIA-ACP] Moteurs allumés. Prêt au décollage.");
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    console.log("✈️ [BIA-ACP] Systèmes activés. Bon vol !");
   } catch (err) {
     console.error("❌ Erreur au démarrage:", err);
   }
 };
 
+// Montage direct
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', startApp);
 } else {

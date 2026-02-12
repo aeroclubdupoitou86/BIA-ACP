@@ -59,21 +59,6 @@
     <script>
         // Polyfill pour process.env requis par Gemini
         window.process = { env: { API_KEY: "" } };
-
-        window.onerror = function(msg, url, line) {
-            console.error("🚨 Erreur critique:", msg);
-            if (msg.includes("MIME") || msg.includes("React error #31")) {
-                const root = document.getElementById('root');
-                if (root) {
-                    root.innerHTML = `<div style="padding:40px; text-align:center; font-family:sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:white; color:#1e293b;">
-                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-5xl mb-6"></i>
-                        <h2 style="font-weight:900; font-size:20px; margin-bottom:10px;">MISE À JOUR EN COURS</h2>
-                        <p style="color:#64748b; font-size:14px; max-width:300px; line-height:1.6; margin-bottom:20px;">Le déploiement sur Vercel est en train de se finaliser. Veuillez patienter quelques secondes et rafraîchir.</p>
-                        <button onclick="location.reload();" style="padding:12px 24px; background:#2563eb; color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer;">Rafraîchir la page</button>
-                    </div>`;
-                }
-            }
-        };
     </script>
 </head>
 <body>
@@ -82,7 +67,7 @@
             <div class="plane-loading mb-6">
                 <i class="fa-solid fa-plane-up text-5xl text-blue-600"></i>
             </div>
-            <p class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-500">Vérification des systèmes...</p>
+            <p class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-500">Initialisation du cockpit...</p>
         </div>
     </div>
 </body>
