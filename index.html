@@ -56,7 +56,7 @@
     <script>
         // Polyfill indispensable pour le SDK Gemini
         window.process = { env: { API_KEY: "" } };
-        console.log("🚀 [BIA-ACP] Systèmes prêts. Lancement du module principal...");
+        console.log("🚀 [BIA-ACP] Cockpit purifié. Initialisation automatique...");
     </script>
 </head>
 <body>
@@ -68,8 +68,5 @@
             <p class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-500">Mise en route du cockpit...</p>
         </div>
     </div>
-    
-    <!-- Appel explicite au fichier principal pour éviter le blocage -->
-    <script type="module" src="index.tsx"></script>
 </body>
 </html>
