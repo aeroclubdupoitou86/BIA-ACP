@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-console.log("✈️ [BIA-ACP] index.tsx : Démarrage de l'initialisation...");
+console.log("✈️ [BIA-ACP] index.tsx : Système d'exploitation en cours de chargement...");
 
 const mountApp = () => {
   const container = document.getElementById('root');
@@ -13,24 +13,19 @@ const mountApp = () => {
   }
 
   try {
-    console.log("🛠️ [BIA-ACP] Création du root React...");
     const root = createRoot(container);
     root.render(
       <React.StrictMode>
         <App />
       </React.StrictMode>
     );
-    console.log("✅ [BIA-ACP] Montage terminé avec succès.");
+    console.log("✅ [BIA-ACP] Interface prête. Décollage immédiat !");
   } catch (err) {
-    console.error("❌ [BIA-ACP] Erreur fatale lors du montage:", err);
-    container.innerHTML = `<div style="padding:40px;text-align:center;">
-      <h2 style="color:red;">Erreur Critique</h2>
-      <p>${err instanceof Error ? err.message : 'Échec du moteur'}</p>
-    </div>`;
+    console.error("❌ [BIA-ACP] Erreur critique lors du montage:", err);
   }
 };
 
-// On s'assure de lancer le montage peu importe l'état du document
+// Exécution immédiate ou après chargement du DOM
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', mountApp);
 } else {

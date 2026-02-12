@@ -57,20 +57,21 @@
         // Polyfill pour process.env requis par Gemini
         window.process = { env: { API_KEY: "" } };
         
-        console.log("🚀 [BIA-ACP] Importmap nettoyé. En attente du module index.tsx...");
+        console.log("🚀 [BIA-ACP] Importmap corrigé (React 18 uniquement). Tentative de lancement...");
         
         window.addEventListener('error', function(e) {
-            console.error("🚨 Erreur de chargement détectée:", e.message);
+            console.error("🚨 Erreur fatale au chargement:", e.message);
             const root = document.getElementById('root');
             if (root && root.innerText.includes('Mise en route')) {
                 root.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;">
-                    <h2 style="color:#ef4444;">Panne au démarrage</h2>
-                    <p style="color:#64748b;font-size:14px;">Un problème technique empêche l'affichage.<br><small>${e.message}</small></p>
-                    <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;">Redémarrer</button>
+                    <h2 style="color:#ef4444;">Panne de démarrage</h2>
+                    <p style="color:#64748b;font-size:14px;">Un problème technique empêche l'allumage du cockpit.<br><small>${e.message}</small></p>
+                    <button onclick="location.reload()" style="margin-top:20px;padding:12px 24px;background:#2563eb;color:white;border:none;border-radius:12px;font-weight:bold;cursor:pointer;">Réessayer le démarrage</button>
                 </div>`;
             }
         });
     </script>
+    <script type="module" src="index.tsx"></script>
 </head>
 <body>
     <div id="root">
