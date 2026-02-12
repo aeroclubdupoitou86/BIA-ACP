@@ -21,6 +21,17 @@
     <style>
         html, body { background-color: #f8fafc; margin: 0; padding: 0; height: 100%; width: 100%; }
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        /* Masquer la barre de défilement (ascenseur) pour tous les navigateurs */
+        * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer et Edge */
+        }
+        
+        *::-webkit-scrollbar {
+            display: none; /* Chrome, Safari et Opera */
+        }
+
         .plane-loading { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
