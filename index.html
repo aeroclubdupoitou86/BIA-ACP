@@ -57,14 +57,16 @@
         // Polyfill pour process.env requis par Gemini
         window.process = { env: { API_KEY: "" } };
         
-        // Capture des erreurs au chargement
+        console.log("🚀 [BIA-ACP] Importmap nettoyé. En attente du module index.tsx...");
+        
         window.addEventListener('error', function(e) {
-            console.error("🚨 Erreur système détectée:", e.message);
+            console.error("🚨 Erreur de chargement détectée:", e.message);
             const root = document.getElementById('root');
             if (root && root.innerText.includes('Mise en route')) {
                 root.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;">
-                    <h2 style="color:#ef4444;">Erreur de connexion</h2>
-                    <p style="color:#64748b;font-size:14px;">Vérifiez votre connexion ou rafraîchissez la page.<br><small>${e.message}</small></p>
+                    <h2 style="color:#ef4444;">Panne au démarrage</h2>
+                    <p style="color:#64748b;font-size:14px;">Un problème technique empêche l'affichage.<br><small>${e.message}</small></p>
+                    <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;">Redémarrer</button>
                 </div>`;
             }
         });
