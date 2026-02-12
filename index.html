@@ -48,10 +48,38 @@
         </div>
     </div>
 
-    <!-- Moteur de transpilation client -->
+    <!-- Chargeur de modules pour navigateurs -->
     <script type="module" src="https://esm.sh/run" crossorigin></script>
-    
-    <!-- On utilise text/tsx pour que esm.sh/run prenne le relais et évite l'erreur MIME -->
-    <script type="text/tsx" src="index.tsx"></script>
+
+    <!-- Code de démarrage intégré pour éviter les erreurs MIME Type au premier chargement -->
+    <script type="text/tsx">
+        import React from 'react';
+        import { createRoot } from 'react-dom/client';
+        import App from './App.tsx';
+
+        console.log("✈️ [BIA-ACP] Allumage des systèmes embarqués...");
+
+        const container = document.getElementById('root');
+        if (container) {
+            try {
+                const root = createRoot(container);
+                root.render(
+                    <React.StrictMode>
+                        <App />
+                    </React.StrictMode>
+                );
+            } catch (error) {
+                console.error("❌ Panne moteur au démarrage:", error);
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen p-10 text-center">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-4"></i>
+                        <h1 class="text-xl font-bold mb-2">Erreur de démarrage</h1>
+                        <p class="text-slate-500 text-sm mb-6">Le cockpit n'a pas pu s'initialiser correctement.</p>
+                        <button onclick="window.location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold">Redémarrer</button>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
