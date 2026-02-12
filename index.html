@@ -56,14 +56,7 @@
     <script>
         // Polyfill indispensable pour le SDK Gemini
         window.process = { env: { API_KEY: "" } };
-        
-        console.log("🚀 [BIA-ACP] Configuration système validée. Chargement du module principal...");
-        
-        window.addEventListener('error', function(e) {
-            if (e.message.includes('importmap')) {
-                console.error("🚨 Conflit d'importmap détecté.");
-            }
-        });
+        console.log("🚀 [BIA-ACP] Importmap purifié. Lancement du module...");
     </script>
 </head>
 <body>
