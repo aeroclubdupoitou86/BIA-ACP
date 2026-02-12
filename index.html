@@ -8,7 +8,6 @@
     <meta name="theme-color" content="#2563eb">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="BIA ACP">
     
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="apple-touch-icon" href="logo.svg">
@@ -19,11 +18,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
-        html, body { -ms-overflow-style: none !important; scrollbar-width: none !important; overscroll-behavior-y: none; background-color: #f8fafc; }
-        ::-webkit-scrollbar { display: none !important; }
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fade-in { animation: fadeIn 0.3s ease-in forwards; }
+        html, body { background-color: #f8fafc; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .plane-loading { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
     </style>
 
     <script type="importmap">
@@ -42,42 +40,53 @@
 </head>
 <body>
     <div id="root">
-        <div class="flex flex-col items-center justify-center min-h-screen text-slate-400">
-            <i class="fa-solid fa-plane-up animate-bounce text-4xl mb-4 text-blue-600"></i>
-            <p class="font-black text-[10px] uppercase tracking-[0.2em]">Chargement des instruments...</p>
+        <div class="flex flex-col items-center justify-center min-h-screen text-slate-400 p-6 text-center">
+            <div class="plane-loading mb-6">
+                <i class="fa-solid fa-plane-up text-5xl text-blue-600"></i>
+            </div>
+            <p id="loading-status" class="font-black text-[10px] uppercase tracking-[0.2em]">Chargement des instruments...</p>
+            
+            <!-- Zone de diagnostic masquée par défaut -->
+            <div id="error-diag" class="hidden mt-8 p-4 bg-red-50 border border-red-100 rounded-2xl max-w-xs mx-auto text-left animate-fade-in">
+                <p class="text-red-600 font-bold text-[10px] mb-2 uppercase tracking-wider">Erreur de liaison satellite :</p>
+                <p id="error-msg" class="text-[9px] font-mono text-red-500 break-words leading-relaxed"></p>
+                <button onclick="window.location.reload()" class="mt-4 w-full bg-slate-900 text-white py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-transform">Redémarrer</button>
+            </div>
         </div>
     </div>
 
-    <!-- Chargeur de modules pour navigateurs -->
+    <!-- Moteur de chargement esm.sh -->
     <script type="module" src="https://esm.sh/run" crossorigin></script>
 
-    <!-- Code de démarrage intégré pour éviter les erreurs MIME Type au premier chargement -->
+    <!-- Script de démarrage -->
     <script type="text/tsx">
         import React from 'react';
         import { createRoot } from 'react-dom/client';
         import App from './App.tsx';
 
-        console.log("✈️ [BIA-ACP] Allumage des systèmes embarqués...");
+        const status = document.getElementById('loading-status');
+        const diag = document.getElementById('error-diag');
+        const msg = document.getElementById('error-msg');
 
-        const container = document.getElementById('root');
-        if (container) {
-            try {
-                const root = createRoot(container);
-                root.render(
-                    <React.StrictMode>
-                        <App />
-                    </React.StrictMode>
-                );
-            } catch (error) {
-                console.error("❌ Panne moteur au démarrage:", error);
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center min-h-screen p-10 text-center">
-                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-4"></i>
-                        <h1 class="text-xl font-bold mb-2">Erreur de démarrage</h1>
-                        <p class="text-slate-500 text-sm mb-6">Le cockpit n'a pas pu s'initialiser correctement.</p>
-                        <button onclick="window.location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold">Redémarrer</button>
-                    </div>
-                `;
+        try {
+            if (status) status.innerText = "Initialisation du cockpit...";
+            
+            const container = document.getElementById('root');
+            if (!container) throw new Error("Conteneur root introuvable");
+
+            const root = createRoot(container);
+            root.render(
+                <React.StrictMode>
+                    <App />
+                </React.StrictMode>
+            );
+            console.log("✈️ [BIA-ACP] Vol autorisé. Systèmes OK.");
+        } catch (e) {
+            console.error("Crash au démarrage:", e);
+            if (status) status.innerText = "Panne système détectée";
+            if (diag && msg) {
+                diag.classList.remove('hidden');
+                msg.innerText = e.message || String(e);
             }
         }
     </script>
