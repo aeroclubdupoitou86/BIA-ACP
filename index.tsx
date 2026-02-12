@@ -1,19 +1,27 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-console.log("✈️ [BIA-ACP] Initialisation du module principal...");
+console.log("✈️ [BIA-ACP] Systèmes de bord en cours de chargement...");
 
-const container = document.getElementById('root');
+const init = () => {
+  const container = document.getElementById('root');
+  if (container) {
+    try {
+      const root = createRoot(container);
+      root.render(<App />);
+      console.log("✅ [BIA-ACP] Interface déployée.");
+    } catch (e) {
+      console.error("❌ [BIA-ACP] Crash au démarrage:", e);
+    }
+  } else {
+    console.error("❌ [BIA-ACP] Point d'ancrage 'root' introuvable.");
+  }
+};
 
-if (container) {
-  const root = createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-  console.log("✅ [BIA-ACP] Cockpit activé.");
+// Sécurité : s'assurer que le DOM est prêt
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  console.error("❌ [BIA-ACP] Erreur critique : Élément #root non trouvé.");
+  init();
 }
