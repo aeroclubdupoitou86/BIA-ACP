@@ -14,7 +14,7 @@ const Cours: React.FC = () => {
             RESSOURCES PARTAGÉES
           </div>
           
-          <p className="text-slate-500 text-sm sm:text-base font-medium leading-relaxed italic mb-10 lowercase">
+          <p className="text-slate-500 text-sm sm:text-base font-medium leading-relaxed italic mb-10 lowercase text-justify">
             les cours dispensés à l'aéroclub sont disponibles en ligne. il est possible de les télécharger ↓
           </p>
 

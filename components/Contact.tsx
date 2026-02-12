@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Contact: React.FC = () => {
-  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=Aéroclub+du+Poitou+Rue+S+Lieut+Raymond+Collard+86580+Biard";
+  const address = "Rue S Lieut Raymond Collard, 86580 Biard";
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Aéroclub du Poitou " + address)}`;
   const instagramUrl = "https://www.instagram.com/aeroclubpoitou/";
+  
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyAddress = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText("Aéroclub du Poitou, " + address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const ContactCard = ({ role, name, phone, icon }: { role: string, name: string, phone: string, icon: string }) => {
     const formattedPhone = phone.replace(/\s/g, '');
@@ -81,21 +92,34 @@ const Contact: React.FC = () => {
             </div>
 
             <div className="md:col-span-2">
-              <a 
-                href={mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start p-4 rounded-xl border border-slate-100 hover:border-slate-300 transition-all bg-white"
-              >
-                <div className="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center text-base mr-4 shrink-0">
-                  <i className="fa-solid fa-location-dot"></i>
-                </div>
-                <div>
-                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Nous trouver</p>
-                  <p className="font-black text-slate-900 text-xs sm:text-sm mb-0.5">AéroClub du Poitou</p>
-                  <p className="text-[10px] text-slate-500 font-medium italic">Rue S Lieut Raymond Collard, 86580 Biard</p>
-                </div>
-              </a>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a 
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-start p-4 rounded-xl border border-slate-100 hover:border-slate-300 transition-all bg-white"
+                >
+                  <div className="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center text-base mr-4 shrink-0">
+                    <i className="fa-solid fa-location-dot"></i>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Nous trouver</p>
+                    <p className="font-black text-slate-900 text-xs sm:text-sm mb-0.5">AéroClub du Poitou</p>
+                    <p className="text-[10px] text-slate-500 font-medium italic truncate">{address}</p>
+                  </div>
+                </a>
+                <button 
+                  onClick={handleCopyAddress}
+                  className={`sm:w-32 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-all font-black text-[10px] uppercase tracking-widest ${
+                    copied 
+                      ? 'bg-green-50 border-green-200 text-green-600' 
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 active:scale-95'
+                  }`}
+                >
+                  <i className={`fa-solid ${copied ? 'fa-check' : 'fa-copy'}`}></i>
+                  {copied ? 'Copié !' : 'Copier'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

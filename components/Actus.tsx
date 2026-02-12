@@ -23,6 +23,7 @@ const Actus: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [clickingId, setClickingId] = useState<string | null>(null);
   
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -45,6 +46,19 @@ const Actus: React.FC = () => {
     }
     fetchArticles();
   }, []);
+
+  // Gérer le bouton "Retour" du téléphone
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (selectedArticle) {
+        setSelectedArticle(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedArticle]);
 
   const fetchWithProxy = async (url: string, signal: AbortSignal) => {
     const ts = new Date().getTime();
@@ -125,13 +139,18 @@ const Actus: React.FC = () => {
   const displayedArticles = useMemo(() => articles.slice(0, displayCount), [articles, displayCount]);
 
   const handleSelectArticle = (art: Article) => {
-    setSelectedArticle(art);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setClickingId(art.id);
+    // Petit délai pour laisser l'animation de clic se voir sur mobile
+    setTimeout(() => {
+      window.history.pushState({ articleId: art.id }, '');
+      setSelectedArticle(art);
+      setClickingId(null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 150);
   };
 
   const handleBack = () => {
-    setSelectedArticle(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.history.back(); // Cela déclenchera popstate géré plus haut
   };
 
   if (selectedArticle) {
@@ -147,8 +166,6 @@ const Actus: React.FC = () => {
             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 mb-8 leading-tight">{selectedArticle.title}</h2>
             <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-4" dangerouslySetInnerHTML={{ __html: selectedArticle.content }} />
           </div>
-          
-          {/* Bouton retour en bas de l'article */}
           <div className="p-8 sm:p-12 pt-0 border-t border-slate-50 mt-8 flex justify-center">
             <button 
               onClick={handleBack} 
@@ -174,15 +191,27 @@ const Actus: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {loading && articles.length === 0 ? [1,2,3,4,5,6].map(i => <div key={i} className="bg-white h-80 rounded-[2rem] border border-slate-200 animate-pulse"></div>) :
           displayedArticles.map((art) => (
-            <article key={art.id} className="bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+            <article 
+              key={art.id} 
+              onClick={() => handleSelectArticle(art)}
+              className={`bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group cursor-pointer ${clickingId === art.id ? 'scale-[0.97] opacity-80 bg-slate-50' : 'scale-100'}`}
+            >
               <div className="h-44 sm:h-52 bg-slate-100 overflow-hidden relative">
-                {art.image && <img src={art.image} className="w-full h-full object-cover" />}
+                {art.image && <img src={art.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="" />}
                 <div className="absolute top-4 left-4"><span className="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[9px] font-black text-slate-800 tracking-widest uppercase">{art.published}</span></div>
               </div>
               <div className="p-6 sm:p-8 flex flex-col flex-1">
-                <h3 className="text-lg font-black text-slate-900 leading-tight mb-4 line-clamp-2">{art.title}</h3>
+                <h3 
+                  className="text-lg font-black text-slate-900 leading-tight mb-4 line-clamp-2 hover:text-blue-600 transition-colors"
+                >
+                  {art.title}
+                </h3>
                 <p className="text-slate-500 text-xs mb-6 line-clamp-3 italic">{art.summary}</p>
-                <div className="mt-auto flex justify-end"><button onClick={() => handleSelectArticle(art)} className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-slate-900 transition-all"><i className="fa-solid fa-arrow-right"></i></button></div>
+                <div className="mt-auto flex justify-end">
+                  <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center group-hover:bg-slate-900 transition-all">
+                    <i className="fa-solid fa-arrow-right"></i>
+                  </div>
+                </div>
               </div>
             </article>
           ))

@@ -33,7 +33,7 @@ const App: React.FC = () => {
   const getPageTitle = () => {
     switch (activeTab) {
       case 'actus': return "Actualités BIA";
-      case 'agenda': return "Planning des Cours";
+      case 'agenda': return "Agenda des cours";
       case 'cours': return "Cours en ligne";
       case 'contact': return "Contact & Équipe";
       case 'aide': return "Installation App";

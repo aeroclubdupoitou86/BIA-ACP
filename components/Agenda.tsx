@@ -8,13 +8,13 @@ const Agenda: React.FC = () => {
   const publicUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBOaU_OuHjCh4GQLjyjDNOsoBZgWDhmt_EJf_LQuihoSVnEQusw1PKTxM70PkzCwzIgk4mmjWo58BZ/pubhtml";
   const embedUrl = `${publicUrl}?widget=true&headers=false`;
 
-  // Largeur native estimée pour un affichage propre du planning sans trop de blanc
-  const SHEET_NATIVE_WIDTH = 780; 
+  // Réglage plus précis pour éliminer les bandes blanches latérales et maximiser l'espace utile
+  const SHEET_NATIVE_WIDTH = 720; 
 
   const updateAutoZoom = useCallback(() => {
     if (containerRef.current) {
       const containerWidth = containerRef.current.offsetWidth;
-      // Calcul du zoom pour que le contenu occupe exactement toute la largeur du conteneur
+      // Force le remplissage exact de la largeur du conteneur
       const calculatedScale = containerWidth / SHEET_NATIVE_WIDTH;
       setZoomScale(calculatedScale);
     }
