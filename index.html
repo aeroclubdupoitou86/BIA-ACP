@@ -19,33 +19,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* Masquage global et définitif des barres de défilement (ascenseurs) */
+        /* Masquage des barres de défilement */
         * {
-            scrollbar-width: none !important; /* Firefox */
-            -ms-overflow-style: none !important; /* IE/Edge */
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
         }
-        
         *::-webkit-scrollbar {
-            display: none !important; /* Chrome, Safari, Opera */
+            display: none !important;
             width: 0 !important;
             height: 0 !important;
         }
-
         html, body { 
             background-color: #f8fafc; 
             margin: 0; 
             padding: 0; 
             height: 100%; 
             width: 100%; 
-            overflow-x: hidden;
+            overflow: hidden;
         }
-        
         body { font-family: 'Inter', sans-serif; }
-
         .plane-loading { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
-        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 
     <script type="importmap">
@@ -63,20 +57,21 @@
 </script>
 
     <script>
-        // Polyfill indispensable pour le fonctionnement de GeminiService.ts
+        // Polyfill pour process.env requis par Gemini
         window.process = { env: { API_KEY: "" } };
 
         window.onerror = function(msg, url, line) {
-            console.error("🚨 ERREUR RUNTIME:", msg);
-            const root = document.getElementById('root');
-            if (root && (root.innerText.includes('MOTEURS') || root.innerHTML === "")) {
-                root.innerHTML = `<div style="padding:40px; text-align:center; font-family:sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:white; color:#1e293b;">
-                    <i class="fa-solid fa-plane-slash text-red-500 text-5xl mb-6"></i>
-                    <h2 style="font-weight:900; font-size:24px; margin-bottom:10px;">PANNE SYSTÈME</h2>
-                    <p style="color:#64748b; font-size:14px; max-width:300px; line-height:1.6; margin-bottom:20px;">L'application n'a pas pu démarrer suite à un conflit technique.</p>
-                    <code style="display:inline-block; padding:8px 12px; background:#f1f5f9; border-radius:8px; font-size:10px; color:#ef4444; margin-bottom:20px;">${msg}</code>
-                    <button onclick="location.reload();" style="display:block; margin:0 auto; padding:12px 24px; background:#2563eb; color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer;">Réessayer le décollage</button>
-                </div>`;
+            console.error("🚨 Erreur critique:", msg);
+            if (msg.includes("MIME") || msg.includes("React error #31")) {
+                const root = document.getElementById('root');
+                if (root) {
+                    root.innerHTML = `<div style="padding:40px; text-align:center; font-family:sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:white; color:#1e293b;">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-5xl mb-6"></i>
+                        <h2 style="font-weight:900; font-size:20px; margin-bottom:10px;">MISE À JOUR EN COURS</h2>
+                        <p style="color:#64748b; font-size:14px; max-width:300px; line-height:1.6; margin-bottom:20px;">Le déploiement sur Vercel est en train de se finaliser. Veuillez patienter quelques secondes et rafraîchir.</p>
+                        <button onclick="location.reload();" style="padding:12px 24px; background:#2563eb; color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer;">Rafraîchir la page</button>
+                    </div>`;
+                }
             }
         };
     </script>
@@ -87,9 +82,8 @@
             <div class="plane-loading mb-6">
                 <i class="fa-solid fa-plane-up text-5xl text-blue-600"></i>
             </div>
-            <p class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-500">Démarrage des moteurs...</p>
+            <p class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-500">Vérification des systèmes...</p>
         </div>
     </div>
-    <!-- L'importation de index.tsx est gérée automatiquement par la plateforme -->
 </body>
 </html>
