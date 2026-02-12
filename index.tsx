@@ -9,7 +9,6 @@ const container = document.getElementById('root');
 if (container) {
   try {
     const root = createRoot(container);
-    // On retire StrictMode pour stabiliser le rendu dans cet environnement particulier
     root.render(<App />);
   } catch (error) {
     console.error("❌ Panne au démarrage:", error);

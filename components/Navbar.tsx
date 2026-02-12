@@ -9,13 +9,14 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: 'actus', name: 'Actus', icon: 'fa-newspaper' },
     { id: 'agenda', name: 'Agenda', icon: 'fa-calendar-days' },
+    { id: 'assistant', name: 'AéroBot', icon: 'fa-robot' },
     { id: 'cours', name: 'Cours', icon: 'fa-book-open' },
     { id: 'aide', name: 'Aide', icon: 'fa-circle-question' },
     { id: 'contact', name: 'Contact', icon: 'fa-envelope' },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-200 flex justify-around items-center h-20 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] px-2">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200 flex justify-around items-center h-20 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] px-2">
       <div className="max-w-7xl mx-auto w-full flex justify-around items-center h-full">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;

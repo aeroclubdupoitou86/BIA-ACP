@@ -5,6 +5,7 @@ import Actus from './components/Actus.tsx';
 import Cours from './components/Cours.tsx';
 import Contact from './components/Contact.tsx';
 import Aide from './components/Aide.tsx';
+import AIAssistant from './components/AIAssistant.tsx';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('actus');
@@ -17,6 +18,7 @@ const App: React.FC = () => {
     switch (activeTab) {
       case 'actus': return <Actus />;
       case 'agenda': return <Agenda />;
+      case 'assistant': return <AIAssistant />;
       case 'cours': return <Cours />;
       case 'aide': return <Aide />;
       case 'contact': return <Contact />;
@@ -28,6 +30,7 @@ const App: React.FC = () => {
     switch (activeTab) {
       case 'actus': return "Actualités BIA";
       case 'agenda': return "Planning des Cours";
+      case 'assistant': return "AéroBot Expert";
       case 'cours': return "Espace Apprentissage";
       case 'contact': return "Contact & Équipe";
       case 'aide': return "Installation App";
