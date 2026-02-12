@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
 
 console.log("✈️ [BIA-ACP] Systèmes de bord en cours de chargement...");
 
@@ -19,7 +19,7 @@ const init = () => {
   }
 };
 
-// Sécurité : s'assurer que le DOM est prêt
+// S'assurer que le DOM est prêt avant le montage
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
