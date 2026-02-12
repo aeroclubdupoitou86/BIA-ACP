@@ -147,6 +147,16 @@ const Actus: React.FC = () => {
             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 mb-8 leading-tight">{selectedArticle.title}</h2>
             <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-4" dangerouslySetInnerHTML={{ __html: selectedArticle.content }} />
           </div>
+          
+          {/* Bouton retour en bas de l'article */}
+          <div className="p-8 sm:p-12 pt-0 border-t border-slate-50 mt-8 flex justify-center">
+            <button 
+              onClick={handleBack} 
+              className="flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl hover:bg-blue-600 transition-all active:scale-95"
+            >
+              <i className="fa-solid fa-arrow-left"></i> Retour aux actualités
+            </button>
+          </div>
         </article>
       </div>
     );

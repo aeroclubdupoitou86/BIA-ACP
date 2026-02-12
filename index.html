@@ -19,30 +19,73 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
+        /* Suppression de l'ascenseur noir et personnalisation discrète */
         * {
-            scrollbar-width: thin !important;
-            scrollbar-color: #cbd5e1 transparent !important;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.1) transparent;
         }
         *::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
+            height: 4px;
         }
         *::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1;
+            background-color: rgba(0,0,0,0.1);
             border-radius: 10px;
         }
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
         html, body { 
             background-color: #f8fafc; 
             margin: 0; 
             padding: 0; 
             min-height: 100%; 
             width: 100%; 
-            overflow-y: auto !important;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
         body { 
             font-family: 'Inter', sans-serif; 
         }
+
+        /* Animations de transition de page */
+        .page-transition {
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation du logo au changement d'onglet */
+        .logo-animate {
+            animation: logoTakeOff 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes logoTakeOff {
+            0% { transform: scale(1) translateY(0) rotate(0deg); }
+            30% { transform: scale(1.2) translateY(-8px) rotate(-15deg); }
+            100% { transform: scale(1) translateY(0) rotate(0deg); }
+        }
+
+        /* Animation du titre au changement d'onglet */
+        .title-animate {
+            animation: titleSlide 0.5s ease-out;
+        }
+
+        @keyframes titleSlide {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
         .plane-loading { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
         
@@ -52,7 +95,6 @@
         }
         .voice-bar { animation: wave 1s ease-in-out infinite; width: 4px; border-radius: 2px; background-color: #60a5fa; }
         
-        /* Animation pour le bouton micro */
         @keyframes pulse-blue {
           0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
           70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }

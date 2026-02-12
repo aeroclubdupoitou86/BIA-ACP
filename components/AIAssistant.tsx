@@ -10,7 +10,7 @@ interface Message {
 
 const AIAssistant: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Bonjour pilote ! Je suis l'AéroBot. Prêt pour une conversation vocale ?" }
+    { role: 'assistant', content: "Bonjour ! Je suis l'AéroBot. Prêt(e) pour une conversation aéro ?" }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,6 @@ const AIAssistant: React.FC = () => {
   const nextStartTimeRef = useRef(0);
   const sourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
 
-  // Auto-scroll logic
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -35,19 +34,26 @@ const AIAssistant: React.FC = () => {
     try {
       setLoading(true);
       
-      // Request mic permission first
+      // 1. D'abord demander la permission (geste utilisateur)
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
+      // 2. Initialiser l'AudioContext immédiatement après l'interaction
+      const AudioCtxClass = (window.AudioContext || (window as any).webkitAudioContext);
+      const inputCtx = new AudioCtxClass({ sampleRate: 16000 });
+      const outputCtx = new AudioCtxClass({ sampleRate: 24000 });
+      
+      // 3. Forcer le démarrage (important pour iOS/Chrome)
+      if (inputCtx.state === 'suspended') await inputCtx.resume();
+      if (outputCtx.state === 'suspended') await outputCtx.resume();
+      
+      audioContextRef.current = outputCtx;
+
       const apiKey = process.env.API_KEY || '';
-      if (!apiKey) throw new Error("Clé API manquante dans l'environnement.");
+      if (!apiKey) throw new Error("API Key missing");
       
       const ai = new GoogleGenAI({ apiKey });
       
-      const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
-      const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-      audioContextRef.current = outputCtx;
-
       const sessionPromise = ai.live.connect({
         model: 'gemini-2.5-flash-native-audio-preview-12-2025',
         config: {
@@ -55,7 +61,7 @@ const AIAssistant: React.FC = () => {
           speechConfig: {
             voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } },
           },
-          systemInstruction: "Tu es l'assistant IA spécialisé pour le BIA. Réponds de façon concise et pédagogique par la voix.",
+          systemInstruction: "Tu es l'assistant IA spécialisé pour le BIA. Réponds de façon concise et pédagogique par la voix. Ton nom est l'AéroBot.",
         },
         callbacks: {
           onopen: () => {
@@ -68,7 +74,9 @@ const AIAssistant: React.FC = () => {
             processor.onaudioprocess = (e) => {
               const inputData = e.inputBuffer.getChannelData(0);
               const pcmBlob = audioUtils.createPcmBlob(inputData);
-              sessionPromise.then(s => s.sendRealtimeInput({ media: pcmBlob }));
+              sessionPromise.then(s => {
+                if (s) s.sendRealtimeInput({ media: pcmBlob });
+              });
             };
             
             source.connect(processor);
@@ -116,7 +124,7 @@ const AIAssistant: React.FC = () => {
       setLoading(false);
       let errorMsg = "Impossible d'accéder au micro.";
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        errorMsg = "Accès au micro refusé. Veuillez autoriser le microphone dans les paramètres de votre navigateur pour ce site.";
+        errorMsg = "Accès au micro refusé. Veuillez l'autoriser dans les réglages.";
       }
       alert(errorMsg);
     }
@@ -151,14 +159,13 @@ const AIAssistant: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-200px)] bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden max-w-4xl mx-auto relative mb-6">
       
-      {/* Mode Vocal Actif */}
       {isLive && (
         <div className="absolute inset-0 z-50 bg-slate-900/98 flex flex-col items-center justify-center text-white p-6 animate-fade-in">
           <div className="mb-8 w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center btn-pulse">
             <i className="fa-solid fa-microphone text-4xl"></i>
           </div>
-          <h2 className="text-xl font-black uppercase tracking-widest mb-2">AéroBot à l'écoute</h2>
-          <p className="text-blue-300 text-[10px] font-bold mb-10 text-center uppercase tracking-widest">Conversation en direct...</p>
+          <h2 className="text-xl font-black uppercase tracking-widest mb-2">Mode Vocal Actif</h2>
+          <p className="text-blue-300 text-[10px] font-bold mb-10 text-center uppercase tracking-widest">AéroBot à l'écoute...</p>
           
           <div className="flex items-end space-x-2 h-10 mb-12">
             {[...Array(8)].map((_, i) => (
@@ -168,14 +175,13 @@ const AIAssistant: React.FC = () => {
 
           <button 
             onClick={stopLiveSession}
-            className="px-10 py-4 bg-red-500 hover:bg-red-600 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-red-500/20 active:scale-95"
+            className="px-10 py-4 bg-red-500 hover:bg-red-600 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl active:scale-95"
           >
-            Couper le micro
+            Quitter le mode vocal
           </button>
         </div>
       )}
 
-      {/* Header */}
       <div className="bg-slate-900 text-white p-4 flex items-center justify-between border-b border-slate-800">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
@@ -183,20 +189,16 @@ const AIAssistant: React.FC = () => {
           </div>
           <div>
             <h3 className="font-black text-sm uppercase tracking-tight">AéroBot</h3>
-            <span className="text-[8px] text-blue-400 font-bold uppercase tracking-widest block">Interface Pilotage</span>
+            <span className="text-[8px] text-blue-400 font-bold uppercase tracking-widest block">Expert BIA</span>
           </div>
         </div>
         <div className="flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-full">
             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-[8px] font-black uppercase text-slate-300 tracking-widest">Système OK</span>
+            <span className="text-[8px] font-black uppercase text-slate-300 tracking-widest">Connecté</span>
         </div>
       </div>
 
-      {/* Messages */}
-      <div 
-        ref={scrollRef}
-        className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50"
-      >
+      <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50 scroll-smooth">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
@@ -221,14 +223,12 @@ const AIAssistant: React.FC = () => {
         )}
       </div>
 
-      {/* Input Zone */}
       <div className="p-4 bg-white border-t border-slate-100">
         <div className="flex items-center space-x-2">
-          {/* Bouton MICRO proéminent */}
           <button 
             onClick={startLiveSession}
             disabled={loading || isLive}
-            className="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center hover:bg-slate-900 transition-all shadow-xl shadow-blue-500/20 active:scale-95 shrink-0 btn-pulse disabled:opacity-50 disabled:animate-none"
+            className="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center hover:bg-slate-900 transition-all shadow-xl shadow-blue-500/20 active:scale-95 shrink-0 btn-pulse disabled:opacity-50"
             title="Démarrer le mode vocal"
           >
             <i className="fa-solid fa-microphone text-xl"></i>
@@ -239,21 +239,21 @@ const AIAssistant: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-              placeholder="Écrivez un message..."
+              placeholder="Posez votre question..."
               className="flex-1 bg-transparent border-none px-3 py-2 text-sm focus:ring-0 resize-none max-h-32 text-slate-900"
               rows={1}
             />
             <button 
               onClick={handleSend}
               disabled={loading || !input.trim()}
-              className="bg-slate-800 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-blue-600 disabled:bg-slate-300 transition-all shrink-0"
+              className="bg-slate-800 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-all shrink-0"
             >
               <i className="fa-solid fa-paper-plane text-xs"></i>
             </button>
           </div>
         </div>
-        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest text-center mt-3 italic">
-           Cliquez sur le micro pour parler en direct avec l'expert BIA
+        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest text-center mt-3 leading-tight px-4">
+           Attention je ne suis qu'un robot et je peux me tromper, n'hésite pas à poser tes questions aux personnes qui te forment au BIA
         </p>
       </div>
     </div>

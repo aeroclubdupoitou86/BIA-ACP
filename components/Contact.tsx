@@ -45,7 +45,7 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            {/* Email - Fix landscape width */}
+            {/* Email */}
             <div className="md:col-span-2">
               <a 
                 href="mailto:aeroclubdupoitou86@gmail.com" 
@@ -92,7 +92,7 @@ const Contact: React.FC = () => {
         <a href="https://www.facebook.com/acpoitouvmpoitiers" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-600 hover:shadow-md transition-all">
           <i className="fa-brands fa-facebook text-xl"></i>
         </a>
-        <a href="https://www.instagram.com/aeroclubpoitou" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-pink-500 hover:shadow-md transition-all">
+        <a href="https://www.instagram.com/aeroclubpoitou/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-pink-500 hover:shadow-md transition-all">
           <i className="fa-brands fa-instagram text-xl"></i>
         </a>
         <a href="https://www.aero-club-poitou.fr/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-400 hover:shadow-md transition-all">
