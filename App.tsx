@@ -61,7 +61,7 @@ const App: React.FC = () => {
       </header>
       
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 pb-28">
-        <div className="animate-fade-in transition-opacity duration-300">
+        <div className="animate-fade-in">
           {renderContent()}
         </div>
       </main>
