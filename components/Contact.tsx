@@ -92,32 +92,32 @@ const Contact: React.FC = () => {
             </div>
 
             <div className="md:col-span-2">
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-row items-stretch gap-2 sm:gap-3">
                 <a 
                   href={mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-start p-4 rounded-xl border border-slate-100 hover:border-slate-300 transition-all bg-white"
+                  className="flex-1 flex items-start p-3 sm:p-4 rounded-xl border border-slate-100 hover:border-slate-300 transition-all bg-white min-w-0"
                 >
-                  <div className="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center text-base mr-4 shrink-0">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center text-sm sm:text-base mr-3 sm:mr-4 shrink-0">
                     <i className="fa-solid fa-location-dot"></i>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Nous trouver</p>
-                    <p className="font-black text-slate-900 text-xs sm:text-sm mb-0.5">AéroClub du Poitou</p>
-                    <p className="text-[10px] text-slate-500 font-medium italic truncate">{address}</p>
+                    <p className="text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Nous trouver</p>
+                    <p className="font-black text-slate-900 text-[10px] sm:text-sm mb-0.5 truncate">AéroClub du Poitou</p>
+                    <p className="text-[9px] sm:text-[10px] text-slate-500 font-medium italic truncate">{address}</p>
                   </div>
                 </a>
                 <button 
                   onClick={handleCopyAddress}
-                  className={`sm:w-32 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-all font-black text-[10px] uppercase tracking-widest ${
+                  className={`flex items-center justify-center gap-2 px-3 sm:px-5 py-2 rounded-xl border transition-all font-black text-[8px] sm:text-[10px] uppercase tracking-widest shrink-0 whitespace-nowrap shadow-sm self-stretch ${
                     copied 
                       ? 'bg-green-50 border-green-200 text-green-600' 
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 active:scale-95'
+                      : 'bg-blue-50 border-blue-100 text-blue-600 hover:bg-blue-100 hover:border-blue-200 active:scale-95'
                   }`}
                 >
-                  <i className={`fa-solid ${copied ? 'fa-check' : 'fa-copy'}`}></i>
-                  {copied ? 'Copié !' : 'Copier'}
+                  <i className={`fa-solid ${copied ? 'fa-check' : 'fa-map-pin'} text-[10px] sm:text-xs`}></i>
+                  <span>{copied ? 'Copié !' : "Copier l'adresse"}</span>
                 </button>
               </div>
             </div>
