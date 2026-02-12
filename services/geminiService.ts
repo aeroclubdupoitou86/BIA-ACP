@@ -10,7 +10,14 @@ Si on te pose une question hors sujet, rappelle poliment ton rôle d'expert BIA.
 `;
 
 export const getGeminiResponse = async (userPrompt: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // On récupère la clé dynamiquement pour éviter les erreurs au chargement du module
+  const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) || "";
+  
+  if (!apiKey) {
+    return "L'assistant n'est pas configuré. Veuillez contacter un administrateur.";
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
   
   try {
     const response = await ai.models.generateContent({
