@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
-console.log("✈️ [BIA-ACP] Moteur démarré !");
+console.log("✈️ [BIA-ACP] Moteur démarré avec succès !");
 
 const container = document.getElementById('root');
 if (container) {
