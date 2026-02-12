@@ -1,102 +1,115 @@
 import React from 'react';
 
 const Contact: React.FC = () => {
+  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=Aéroclub+du+Poitou+Rue+S+Lieut+Raymond+Collard+86580+Biard";
+  const instagramUrl = "https://www.instagram.com/aeroclubpoitou/";
+
+  const ContactCard = ({ role, name, phone, icon }: { role: string, name: string, phone: string, icon: string }) => {
+    const formattedPhone = phone.replace(/\s/g, '');
+    return (
+      <div className="flex items-start bg-slate-50 p-4 rounded-xl border border-slate-100 hover:border-blue-200 transition-colors">
+        <div className={`w-10 h-10 ${icon.includes('shield') ? 'bg-blue-600' : 'bg-slate-800'} text-white rounded-lg flex items-center justify-center text-base mr-4 shrink-0 shadow-md`}>
+          <i className={`fa-solid ${icon}`}></i>
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">{role}</p>
+          <p className="font-black text-slate-900 text-base leading-tight mb-1.5 truncate">{name}</p>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-bold text-slate-600">{phone}</span>
+            <div className="flex gap-1.5">
+              <a 
+                href={`tel:${formattedPhone}`} 
+                className="w-8 h-8 bg-white border border-slate-200 rounded-md flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm active:scale-90"
+              >
+                <i className="fa-solid fa-phone text-[9px]"></i>
+              </a>
+              <a 
+                href={`sms:${formattedPhone}`} 
+                className="w-8 h-8 bg-white border border-slate-200 rounded-md flex items-center justify-center text-slate-600 hover:bg-slate-800 hover:text-white transition-all shadow-sm active:scale-90"
+              >
+                <i className="fa-solid fa-message text-[9px]"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="animate-fade-in max-w-5xl mx-auto">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-        
-        <div className="p-6 sm:p-12">
-          <div className="mb-10">
-            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center">
-              <span className="w-2 h-8 bg-blue-600 rounded-full mr-4"></span>
+    <div className="animate-fade-in max-w-5xl mx-auto pb-4">
+      <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-5 sm:p-8">
+          <div className="mb-6">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center">
+              <span className="w-1.5 h-6 bg-blue-600 rounded-full mr-3"></span>
               L'équipe pédagogique
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-            
-            {/* Responsable Formation */}
-            <div className="flex items-start bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center text-xl mr-5 shrink-0 shadow-lg shadow-blue-100">
-                <i className="fa-solid fa-user-shield"></i>
-              </div>
-              <div>
-                <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-1">Responsable Formation</p>
-                <p className="font-black text-slate-900 text-lg leading-tight mb-2">Jean-François GUICHON</p>
-                <a href="tel:0680844318" className="inline-flex items-center text-sm font-bold text-slate-600 hover:text-blue-600">
-                  <i className="fa-solid fa-phone mr-2 text-xs"></i>
-                  06 80 84 43 18
-                </a>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ContactCard 
+              role="Responsable Formation" 
+              name="Jean-François GUICHON" 
+              phone="06 80 84 43 18" 
+              icon="fa-user-shield" 
+            />
 
-            {/* Instructeur */}
-            <div className="flex items-start bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
-              <div className="w-12 h-12 bg-slate-800 text-white rounded-xl flex items-center justify-center text-xl mr-5 shrink-0 shadow-lg">
-                <i className="fa-solid fa-user-tie"></i>
-              </div>
-              <div>
-                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Instructeur BIA ACP</p>
-                <p className="font-black text-slate-900 text-lg leading-tight mb-2">Julien FRADET</p>
-                <a href="tel:0659877001" className="inline-flex items-center text-sm font-bold text-slate-600 hover:text-blue-600">
-                  <i className="fa-solid fa-phone mr-2 text-xs"></i>
-                  06 59 87 70 01
-                </a>
-              </div>
-            </div>
+            <ContactCard 
+              role="Instructeur BIA ACP" 
+              name="Julien FRADET" 
+              phone="06 59 87 70 01" 
+              icon="fa-user-tie" 
+            />
 
-            {/* Email */}
             <div className="md:col-span-2">
               <a 
                 href="mailto:aeroclubdupoitou86@gmail.com" 
-                className="flex items-center bg-blue-50 p-6 rounded-2xl border border-blue-100 hover:bg-blue-100 transition-all group overflow-hidden"
+                className="flex items-center bg-blue-50 p-4 rounded-xl border border-blue-100 hover:bg-blue-100 transition-all group overflow-hidden"
               >
-                <div className="w-12 h-12 bg-white text-blue-600 rounded-xl flex items-center justify-center text-xl mr-5 shrink-0 shadow-sm">
+                <div className="w-10 h-10 bg-white text-blue-600 rounded-lg flex items-center justify-center text-base mr-4 shrink-0 shadow-sm">
                   <i className="fa-solid fa-envelope"></i>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-1">Nous écrire</p>
-                  <p className="font-black text-slate-900 text-xs sm:text-lg lg:text-xl truncate break-all overflow-hidden">
+                  <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest mb-0.5">Nous écrire</p>
+                  <p className="font-black text-slate-900 text-xs sm:text-base truncate">
                     aeroclubdupoitou86@gmail.com
                   </p>
                 </div>
-                <i className="fa-solid fa-chevron-right ml-4 text-blue-300 group-hover:translate-x-1 transition-transform hidden sm:block"></i>
+                <i className="fa-solid fa-chevron-right ml-3 text-blue-300 group-hover:translate-x-1 transition-transform hidden sm:block"></i>
               </a>
             </div>
 
-            {/* Localisation */}
             <div className="md:col-span-2">
               <a 
-                href="https://www.google.com/maps/place/A%C3%A9roclub+du+Poitou/@46.584544,0.3109356,17z"
+                href={mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-start p-6 rounded-2xl border border-slate-100 hover:border-slate-300 transition-all bg-white"
+                className="flex items-start p-4 rounded-xl border border-slate-100 hover:border-slate-300 transition-all bg-white"
               >
-                <div className="w-12 h-12 bg-slate-100 text-slate-500 rounded-xl flex items-center justify-center text-xl mr-5 shrink-0">
+                <div className="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center text-base mr-4 shrink-0">
                   <i className="fa-solid fa-location-dot"></i>
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Nous trouver</p>
-                  <p className="font-black text-slate-900 text-sm sm:text-base mb-1">AéroClub du Poitou</p>
-                  <p className="text-xs text-slate-500 font-medium italic">Rue S Lieut Raymond Collard, 86580 Biard</p>
+                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Nous trouver</p>
+                  <p className="font-black text-slate-900 text-xs sm:text-sm mb-0.5">AéroClub du Poitou</p>
+                  <p className="text-[10px] text-slate-500 font-medium italic">Rue S Lieut Raymond Collard, 86580 Biard</p>
                 </div>
               </a>
             </div>
-
           </div>
         </div>
       </div>
 
-      {/* Social Links */}
-      <div className="flex justify-center gap-8 py-10">
-        <a href="https://www.facebook.com/acpoitouvmpoitiers" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-600 hover:shadow-md transition-all">
-          <i className="fa-brands fa-facebook text-xl"></i>
+      <div className="flex justify-center gap-6 py-6">
+        <a href="https://www.facebook.com/acpoitouvmpoitiers" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-600 transition-all">
+          <i className="fa-brands fa-facebook text-lg"></i>
         </a>
-        <a href="https://www.instagram.com/aeroclubpoitou/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-pink-500 hover:shadow-md transition-all">
-          <i className="fa-brands fa-instagram text-xl"></i>
+        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-pink-500 transition-all">
+          <i className="fa-brands fa-instagram text-lg"></i>
         </a>
-        <a href="https://www.aero-club-poitou.fr/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-400 hover:shadow-md transition-all">
-          <i className="fa-solid fa-globe text-xl"></i>
+        <a href="https://www.aero-club-poitou.fr/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-400 transition-all">
+          <i className="fa-solid fa-globe text-lg"></i>
         </a>
       </div>
     </div>

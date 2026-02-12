@@ -9,7 +9,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: 'actus', name: 'Actus', icon: 'fa-newspaper' },
     { id: 'agenda', name: 'Agenda', icon: 'fa-calendar-days' },
-    { id: 'assistant', name: 'AéroBot', icon: 'fa-robot' },
     { id: 'cours', name: 'Cours', icon: 'fa-book-open' },
     { id: 'aide', name: 'Aide', icon: 'fa-circle-question' },
     { id: 'contact', name: 'Contact', icon: 'fa-envelope' },
@@ -28,26 +27,40 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 isActive ? 'text-blue-600' : 'text-slate-400 hover:text-blue-500'
               }`}
             >
-              <div className="relative mb-1 flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-1">
-                <i className={`fa-solid ${tab.icon} text-lg transition-all duration-300 group-hover:scale-110 ${isActive ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}></i>
+              <div className={`relative mb-1 flex items-center justify-center transition-all duration-300 transform ${isActive ? 'scale-110 -translate-y-1' : 'group-hover:scale-110'}`}>
+                <i className={`fa-solid ${tab.icon} text-lg transition-all duration-300 ${isActive ? 'opacity-0' : 'opacity-100'}`}></i>
+                
                 {isActive && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-slate-100 plane-takeoff">
-                      <i className="fa-solid fa-plane text-blue-600 text-sm"></i>
+                  <div className="absolute inset-0 flex items-center justify-center animate-[bounceIn_0.5s_ease-out]">
+                    <div className="w-9 h-9 bg-blue-50 rounded-full flex items-center justify-center shadow-inner border border-blue-100">
+                      <i className="fa-solid fa-plane text-blue-600 text-sm transform rotate-[-45deg] animate-[planeWiggle_3s_infinite_ease-in-out]"></i>
                     </div>
                   </div>
                 )}
               </div>
-              <span className={`text-[9px] font-black uppercase tracking-tight transition-all duration-300 ${isActive ? 'opacity-100 scale-100 mt-1' : 'opacity-70 scale-95 group-hover:opacity-100 group-hover:scale-100'}`}>
+
+              <span className={`text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${isActive ? 'opacity-100 scale-100 mt-1' : 'opacity-60 scale-95 group-hover:opacity-100'}`}>
                 {tab.name}
               </span>
-              {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-blue-600 rounded-b-full shadow-[0_2px_10px_rgba(37,99,235,0.4)]"></div>
-              )}
+
+              <div className={`absolute top-0 left-1/2 -translate-x-1/2 h-1 bg-blue-600 rounded-b-full transition-all duration-500 ease-out shadow-[0_2px_10px_rgba(37,99,235,0.4)] ${isActive ? 'w-10 opacity-100' : 'w-0 opacity-0'}`}></div>
             </button>
           );
         })}
       </div>
+
+      <style>{`
+        @keyframes bounceIn {
+          0% { transform: scale(0.3); opacity: 0; }
+          50% { transform: scale(1.1); opacity: 1; }
+          70% { transform: scale(0.9); }
+          100% { transform: scale(1); }
+        }
+        @keyframes planeWiggle {
+          0%, 100% { transform: rotate(-45deg) translateY(0); }
+          50% { transform: rotate(-40deg) translateY(-2px); }
+        }
+      `}</style>
     </nav>
   );
 };
