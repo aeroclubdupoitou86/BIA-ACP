@@ -59,13 +59,15 @@
         
         // Capture des erreurs au chargement
         window.addEventListener('error', function(e) {
-            console.error("🚨 Erreur détectée au chargement:", e.message);
-            if (e.message.includes('import')) {
-                const root = document.getElementById('root');
-                if (root) root.innerHTML = '<div style="padding:20px;text-align:center;">Erreur de chargement des modules. Veuillez rafraîchir.</div>';
+            console.error("🚨 Erreur système détectée:", e.message);
+            const root = document.getElementById('root');
+            if (root && root.innerText.includes('Mise en route')) {
+                root.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;">
+                    <h2 style="color:#ef4444;">Erreur de connexion</h2>
+                    <p style="color:#64748b;font-size:14px;">Vérifiez votre connexion ou rafraîchissez la page.<br><small>${e.message}</small></p>
+                </div>`;
             }
         });
-        console.log("🚀 [BIA-ACP] Moteur en attente de index.tsx...");
     </script>
 </head>
 <body>
