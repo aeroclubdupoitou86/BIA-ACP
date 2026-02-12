@@ -1,12 +1,4 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "headers": [
-    {
-      "source": "/(.*).tsx",
-      "headers": [
-        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
-      ]
-    }
-  ]
+  "cleanUrls": true
 }
