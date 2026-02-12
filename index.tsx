@@ -2,20 +2,21 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 
-console.log("🚀 [BIA-ACP] Engine Start...");
-
-const mountApp = () => {
+const init = () => {
   const container = document.getElementById('root');
   if (container) {
     const root = createRoot(container);
-    root.render(<App />);
-    console.log("✅ [BIA-ACP] Dashboard Ready");
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    console.log("✈️ [BIA-ACP] Dashboard mounted successfully on React 18.3.1");
   }
 };
 
-// On s'assure que le DOM est prêt
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountApp);
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  mountApp();
+  init();
 }
