@@ -52,11 +52,6 @@
   }
 }
 </script>
-
-    <script>
-        // On laisse la plateforme gérer process.env.API_KEY automatiquement
-        console.log("🚀 [BIA-ACP] Cockpit : Séquence d'allumage initiale...");
-    </script>
 </head>
 <body>
     <div id="root">
@@ -67,5 +62,12 @@
             <p class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-500">Mise en route du cockpit...</p>
         </div>
     </div>
+
+    <!-- CETTE LIGNE EST CRUCIALE POUR LANCER L'APPLICATION -->
+    <script type="module" src="index.tsx"></script>
+
+    <script>
+        console.log("🚀 [BIA-ACP] HTML chargé. Lancement du module principal...");
+    </script>
 </body>
 </html>
