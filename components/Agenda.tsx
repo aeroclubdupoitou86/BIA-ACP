@@ -5,16 +5,17 @@ const Agenda: React.FC = () => {
   const [iframeKey, setIframeKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Ce lien public ne nécessite aucune connexion Google pour être consulté.
   const publicUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBOaU_OuHjCh4GQLjyjDNOsoBZgWDhmt_EJf_LQuihoSVnEQusw1PKTxM70PkzCwzIgk4mmjWo58BZ/pubhtml";
   const embedUrl = `${publicUrl}?widget=true&headers=false`;
 
-  // Réglage plus précis pour éliminer les bandes blanches latérales et maximiser l'espace utile
-  const SHEET_NATIVE_WIDTH = 720; 
+  // Réglage optimal pour que le contenu utile remplisse toute la largeur mobile
+  const SHEET_NATIVE_WIDTH = 680; 
 
   const updateAutoZoom = useCallback(() => {
     if (containerRef.current) {
       const containerWidth = containerRef.current.offsetWidth;
-      // Force le remplissage exact de la largeur du conteneur
+      // On force le remplissage complet de la largeur disponible
       const calculatedScale = containerWidth / SHEET_NATIVE_WIDTH;
       setZoomScale(calculatedScale);
     }
@@ -107,7 +108,7 @@ const Agenda: React.FC = () => {
           className="flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-blue-700 h-12 transition-all active:scale-95"
         >
           <i className="fa-solid fa-expand"></i>
-          <span className="hidden sm:inline">Plein écran</span>
+          <span className="hidden sm:inline">Navigateur</span>
           <span className="sm:hidden text-[8px]">Ouvrir</span>
         </a>
       </div>
