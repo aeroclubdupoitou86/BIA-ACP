@@ -86,7 +86,7 @@ const Contact: React.FC = () => {
             <ContactCard 
               role="Responsable Formation" 
               name="Jean-François GUICHON" 
-              phone="06 80 84 43 18" 
+              phone="06 XX XX XX XX" //06 80 84 43 18
               icon="fa-user-shield" 
             />
 
