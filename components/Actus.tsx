@@ -47,7 +47,6 @@ const Actus: React.FC = () => {
     fetchArticles();
   }, []);
 
-  // Gérer le bouton "Retour" du téléphone
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       if (selectedArticle) {
@@ -140,7 +139,6 @@ const Actus: React.FC = () => {
 
   const handleSelectArticle = (art: Article) => {
     setClickingId(art.id);
-    // Petit délai pour laisser l'animation de clic se voir sur mobile
     setTimeout(() => {
       window.history.pushState({ articleId: art.id }, '');
       setSelectedArticle(art);
@@ -150,7 +148,7 @@ const Actus: React.FC = () => {
   };
 
   const handleBack = () => {
-    window.history.back(); // Cela déclenchera popstate géré plus haut
+    window.history.back();
   };
 
   if (selectedArticle) {
@@ -181,13 +179,31 @@ const Actus: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm gap-4">
-        <div className="flex items-center">
-          <div className={`w-2.5 h-2.5 rounded-full mr-3 ${refreshing ? 'bg-amber-400 animate-pulse' : 'bg-green-500'}`}></div>
-          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{refreshing ? 'Synchronisation...' : 'Articles à jour'}</span>
+      {/* EN-TÊTE AVEC BOUTON BLOG ÉPURÉ */}
+      <div className="flex flex-col bg-white p-4 rounded-2xl border border-slate-200 shadow-sm gap-4">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center">
+            <div className={`w-2.5 h-2.5 rounded-full mr-3 ${refreshing ? 'bg-amber-400 animate-pulse' : 'bg-green-500'}`}></div>
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+              {refreshing ? 'Synchronisation...' : 'Articles à jour'}
+            </span>
+          </div>
+          
+          <a 
+            href="https://bia-acp.blogspot.com/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-3 py-1 bg-slate-100 text-slate-400 rounded-lg text-[9px] font-black uppercase tracking-tighter hover:bg-slate-200 hover:text-slate-600 transition-all"
+          >
+            BLOG
+          </a>
         </div>
-        <button onClick={() => fetchArticles(true)} className="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">Actualiser</button>
+        
+        <button onClick={() => fetchArticles(true)} className="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors active:scale-[0.99]">
+          Actualiser
+        </button>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {loading && articles.length === 0 ? [1,2,3,4,5,6].map(i => <div key={i} className="bg-white h-80 rounded-[2rem] border border-slate-200 animate-pulse"></div>) :
           displayedArticles.map((art) => (
@@ -201,9 +217,7 @@ const Actus: React.FC = () => {
                 <div className="absolute top-4 left-4"><span className="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[9px] font-black text-slate-800 tracking-widest uppercase">{art.published}</span></div>
               </div>
               <div className="p-6 sm:p-8 flex flex-col flex-1">
-                <h3 
-                  className="text-lg font-black text-slate-900 leading-tight mb-4 line-clamp-2 hover:text-blue-600 transition-colors"
-                >
+                <h3 className="text-lg font-black text-slate-900 leading-tight mb-4 line-clamp-2 hover:text-blue-600 transition-colors">
                   {art.title}
                 </h3>
                 <p className="text-slate-500 text-xs mb-6 line-clamp-3 italic">{art.summary}</p>

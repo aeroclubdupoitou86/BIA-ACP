@@ -2,7 +2,9 @@ import React from 'react';
 
 const Cours: React.FC = () => {
   const folderId = "1dAqKwP94pzw5LyX3TLM1Ryz_98R4Dp7Q";
-  const driveFullUrl = `https://drive.google.com/drive/folders/${folderId}`;
+  
+  // Cette URL force l'affichage en mode "public web" sans forcer l'app
+  const driveFullUrl = `https://drive.google.com/drive/mobile/folders/${folderId}?usp=sharing`;
 
   return (
     <div className="space-y-6 animate-fade-in pb-4 max-w-6xl mx-auto">

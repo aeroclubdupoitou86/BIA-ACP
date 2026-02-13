@@ -5,24 +5,23 @@ const Agenda: React.FC = () => {
   const [iframeKey, setIframeKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Ce lien public ne nécessite aucune connexion Google pour être consulté.
   const publicUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBOaU_OuHjCh4GQLjyjDNOsoBZgWDhmt_EJf_LQuihoSVnEQusw1PKTxM70PkzCwzIgk4mmjWo58BZ/pubhtml";
-  const embedUrl = `${publicUrl}?widget=true&headers=false`;
+  const embedUrl = `${publicUrl}?widget=false&headers=false&chrome=false`;
 
-  // Réglage optimal pour que le contenu utile remplisse toute la largeur mobile
-  const SHEET_NATIVE_WIDTH = 680; 
+  // Tes réglages de base
+  const SHEET_NATIVE_WIDTH = 560; 
+  const SHEET_NATIVE_HEIGHT = 900; 
 
   const updateAutoZoom = useCallback(() => {
     if (containerRef.current) {
       const containerWidth = containerRef.current.offsetWidth;
-      // On force le remplissage complet de la largeur disponible
       const calculatedScale = containerWidth / SHEET_NATIVE_WIDTH;
       setZoomScale(calculatedScale);
     }
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(updateAutoZoom, 300);
+    const timer = setTimeout(updateAutoZoom, 500);
     window.addEventListener('resize', updateAutoZoom);
     window.addEventListener('orientationchange', updateAutoZoom);
     return () => {
@@ -42,9 +41,15 @@ const Agenda: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-7xl mx-auto">
+    <div className="space-y-6 animate-fade-in max-w-7xl mx-auto pb-12">
+      {/* Encarts du haut */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-2 bg-slate-900 rounded-3xl p-6 sm:p-8 text-white flex items-center shadow-xl relative overflow-hidden group">
+        <a 
+          href={publicUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="md:col-span-2 bg-slate-900 rounded-3xl p-6 sm:p-8 text-white flex items-center shadow-xl relative overflow-hidden group hover:bg-slate-800 transition-all active:scale-[0.98]"
+        >
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <i className="fa-solid fa-plane-arrival text-8xl rotate-12"></i>
           </div>
@@ -57,7 +62,7 @@ const Agenda: React.FC = () => {
               <span className="text-white font-black">09:00 — 11:00</span> • Aéroclub du Poitou
             </p>
           </div>
-        </div>
+        </a>
         
         <div className="bg-amber-50 border-2 border-amber-200/50 rounded-2xl p-4 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-1.5">
@@ -73,53 +78,46 @@ const Agenda: React.FC = () => {
         </div>
       </div>
 
+      {/* Barre d'outils */}
       <div className="grid grid-cols-3 gap-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
         <div className="flex items-center justify-between bg-slate-50 p-1 rounded-lg border border-slate-100 h-12">
-          <button 
-            onClick={() => adjustZoom(-0.05)} 
-            className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-blue-600 rounded-md transition-all active:scale-90"
-          >
+          <button onClick={() => adjustZoom(-0.05)} className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-blue-600 rounded-md transition-all">
             <i className="fa-solid fa-minus text-xs"></i>
           </button>
           <div className="text-[10px] font-black text-slate-900 uppercase tracking-tighter w-12 text-center">
             {Math.round(zoomScale * 100)}%
           </div>
-          <button 
-            onClick={() => adjustZoom(0.05)} 
-            className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-blue-600 rounded-md transition-all active:scale-90"
-          >
+          <button onClick={() => adjustZoom(0.05)} className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-blue-600 rounded-md transition-all">
             <i className="fa-solid fa-plus text-xs"></i>
           </button>
         </div>
         
-        <button 
-          onClick={handleSync} 
-          className="flex items-center justify-center gap-2 bg-slate-100 text-slate-700 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 hover:text-slate-900 h-12 border border-slate-200 transition-all active:scale-95"
-        >
+        <button onClick={handleSync} className="flex items-center justify-center gap-2 bg-slate-100 text-slate-700 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 h-12 border border-slate-200 transition-all active:scale-95">
           <i className="fa-solid fa-rotate"></i>
-          <span className="hidden sm:inline">Synchroniser</span>
           <span className="sm:hidden text-[8px]">Sync</span>
+          <span className="hidden sm:inline">Synchroniser</span>
         </button>
         
-        <a 
-          href={publicUrl} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-blue-700 h-12 transition-all active:scale-95"
-        >
+        <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-blue-700 h-12 transition-all active:scale-95">
           <i className="fa-solid fa-expand"></i>
-          <span className="hidden sm:inline">Navigateur</span>
           <span className="sm:hidden text-[8px]">Ouvrir</span>
+          <span className="hidden sm:inline">Plein écran</span>
         </a>
       </div>
 
-      <div ref={containerRef} className="bg-white border border-slate-200 shadow-lg h-[65vh] sm:h-[75vh] min-h-[450px] relative rounded-2xl overflow-hidden">
-        <div className="w-full h-full overflow-auto bg-white" style={{ WebkitOverflowScrolling: 'touch' }}>
+      {/* ZONE TABLEAU : Hauteur désormais adaptative au zoom */}
+      <div ref={containerRef} className="bg-white border border-slate-200 shadow-lg rounded-2xl overflow-hidden">
+        <div 
+          className="w-full bg-white overflow-hidden" 
+          style={{ 
+            // La hauteur du conteneur est maintenant calculée : 900px * le zoom actuel
+            height: `${SHEET_NATIVE_HEIGHT * zoomScale}px` 
+          }}
+        >
            <div 
              style={{ 
                width: `${SHEET_NATIVE_WIDTH}px`,
-               minWidth: '100%',
-               height: `${100 / zoomScale}%`,
+               height: `${SHEET_NATIVE_HEIGHT}px`, 
                transform: `scale(${zoomScale})`,
                transformOrigin: 'top left',
              }}
@@ -127,19 +125,21 @@ const Agenda: React.FC = () => {
              <iframe 
                 key={iframeKey}
                 src={embedUrl}
-                className="w-full h-full border-none"
+                className="w-[101%] h-full border-none"
                 title="Planning BIA"
+                scrolling="no"
                 loading="lazy"
               ></iframe>
            </div>
         </div>
       </div>
 
+      {/* Légende avec texte justifié */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start gap-5">
         <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0 border border-blue-100 shadow-sm">
           <i className="fa-solid fa-circle-info text-xl"></i>
         </div>
-        <div className="text-[11px] sm:text-xs text-slate-600 font-medium leading-relaxed text-justify space-y-2">
+        <div className="text-[11px] sm:text-xs text-slate-600 font-medium leading-relaxed text-justify space-y-3">
           <p>
             Les cours inscrits dans la colonne <strong>"MODULE (prévisionnel)"</strong> aux dates qui ne sont pas passées sont des prévisions, et donc susceptibles d'être modifiés.
           </p>

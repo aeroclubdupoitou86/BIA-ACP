@@ -2,10 +2,34 @@ import React, { useState } from 'react';
 
 const Contact: React.FC = () => {
   const address = "Rue S Lieut Raymond Collard, 86580 Biard";
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Aéroclub du Poitou " + address)}`;
-  const instagramUrl = "https://www.instagram.com/aeroclubpoitou/";
   
+  // URL Maps Universelle corrigée (Format officiel de recherche Google)
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Aéroclub du Poitou " + address)}`;
+
   const [copied, setCopied] = useState(false);
+
+  // Fonction de gestion Instagram (Mobile App vs Web)
+  const handleInstagramClick = (e: React.MouseEvent) => {
+    const instagramUsername = "aeroclubpoitou";
+    const appUrl = `instagram://user?username=${instagramUsername}`;
+    const webUrl = `https://www.instagram.com/${instagramUsername}/`;
+
+    // Détection si l'utilisateur est sur mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Sur mobile, on tente d'ouvrir l'application
+      e.preventDefault();
+      window.location.href = appUrl;
+
+      // Si l'application n'est pas installée, on bascule sur le web après 500ms
+      setTimeout(() => {
+        // On vérifie si la page est toujours visible (si l'app s'est ouverte, le timeout est souvent suspendu)
+        window.location.href = webUrl;
+      }, 500);
+    }
+    // Sur PC, on ne fait rien, le target="_blank" et le href standard feront le travail
+  };
 
   const handleCopyAddress = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -129,9 +153,18 @@ const Contact: React.FC = () => {
         <a href="https://www.facebook.com/acpoitouvmpoitiers" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-600 transition-all">
           <i className="fa-brands fa-facebook text-lg"></i>
         </a>
-        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-pink-500 transition-all">
+        
+        {/* BOUTON INSTAGRAM INTELLIGENT */}
+        <a 
+          href="https://www.instagram.com/aeroclubpoitou/" 
+          onClick={handleInstagramClick}
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-pink-500 transition-all"
+        >
           <i className="fa-brands fa-instagram text-lg"></i>
         </a>
+
         <a href="https://www.aero-club-poitou.fr/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400 hover:text-blue-400 transition-all">
           <i className="fa-solid fa-globe text-lg"></i>
         </a>
