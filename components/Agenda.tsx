@@ -9,7 +9,7 @@ const Agenda: React.FC = () => {
   const embedUrl = `${publicUrl}?widget=false&headers=false&chrome=false`;
 
   // Tes réglages de base
-  const SHEET_NATIVE_WIDTH = 560; 
+  const SHEET_NATIVE_WIDTH = 620; 
   const SHEET_NATIVE_HEIGHT = 900; 
 
   const updateAutoZoom = useCallback(() => {
