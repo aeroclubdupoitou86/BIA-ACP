@@ -60,7 +60,7 @@ const Aide: React.FC = () => {
                 </li>
                 <li className="flex items-start">
                   <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center shrink-0 mr-3">3</span>
-                  <span>Appuyez sur <strong>"Installer l'application"</strong> ou "Ajouter à l'écran d'accueil".</span>
+                  <span>Appuyez sur <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.</span>
                 </li>
               </ol>
             </div>
