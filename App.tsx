@@ -59,9 +59,14 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="text-right">
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+            <a 
+              href="https://www.aero-club-poitou.fr/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-[9px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100 hover:bg-slate-100 hover:text-slate-600 transition-all"
+            >
               AEROCLUB DU POITOU
-            </span>
+            </a>
           </div>
         </div>
       </header>

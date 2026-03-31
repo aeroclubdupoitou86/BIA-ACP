@@ -24,6 +24,7 @@ const Actus: React.FC = () => {
   const [error, setError] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [clickingId, setClickingId] = useState<string | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
   
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -64,25 +65,71 @@ const Actus: React.FC = () => {
     const finalUrl = `${url}${url.includes('?') ? '&' : '?'}_t=${ts}`;
     
     const proxies = [
-      (u: string) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+      (u: string) => u, // Direct fetch first (might work if CORS is disabled or via some browser extensions)
+      (u: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
       (u: string) => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-      (u: string) => `https://thingproxy.freeboard.io/fetch/${u}`
+      (u: string) => `https://api.codetabs.com/v1/proxy?url=${encodeURIComponent(u)}`,
+      (u: string) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+      (u: string) => `https://yacdn.org/proxy/${u}`,
     ];
 
     for (const getProxyUrl of proxies) {
+      if (signal.aborted) break;
+      
+      const proxyUrl = getProxyUrl(finalUrl);
       try {
-        const response = await fetch(getProxyUrl(finalUrl), { signal });
+        const proxyController = new AbortController();
+        const proxyTimeoutId = setTimeout(() => proxyController.abort(), 8000); // Increased to 8s
+        
+        const response = await fetch(proxyUrl, { 
+          signal: proxyController.signal,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        clearTimeout(proxyTimeoutId);
+        
         if (response.ok) {
-          const rawData = await response.json();
-          if (rawData.contents) return JSON.parse(rawData.contents);
-          return rawData;
+          const contentType = response.headers.get('content-type');
+          let data;
+          
+          if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+          } else {
+            const text = await response.text();
+            try {
+              data = JSON.parse(text);
+            } catch (e) {
+              console.warn(`Proxy ${proxyUrl} returned non-JSON content`);
+              continue;
+            }
+          }
+
+          // Handle AllOrigins wrapper
+          if (data && typeof data === 'object' && 'contents' in data && typeof data.contents === 'string') {
+            try {
+              data = JSON.parse(data.contents);
+            } catch (e) {
+              console.warn("Failed to parse AllOrigins contents as JSON");
+              continue;
+            }
+          }
+          
+          // Validate Blogger JSON structure
+          if (data && (data.feed || data.entry)) {
+            return data;
+          }
+          
+          console.warn(`Proxy ${proxyUrl} returned valid JSON but not a Blogger feed`);
         }
       } catch (e) {
-        if ((e as Error).name === 'AbortError') throw e;
-        console.warn("Proxy failed, trying next...");
+        if ((e as Error).name === 'AbortError' && signal.aborted) throw e;
+        console.warn(`Proxy ${proxyUrl} failed:`, (e as Error).message);
+        // Wait a bit before trying the next proxy
+        await new Promise(resolve => setTimeout(resolve, 300));
       }
     }
-    throw new Error("Tous les proxys ont échoué");
+    throw new Error("Tous les proxys ont échoué (Erreur de connexion au flux Blogger)");
   };
 
   const fetchArticles = useCallback(async (isRefresh = false) => {
@@ -95,10 +142,10 @@ const Actus: React.FC = () => {
     setError(false);
     
     try {
-      const blogUrl = `https://bia-acp.blogspot.com/feeds/posts/default?alt=json`;
+      const blogUrl = `https://bia-acp.blogspot.com/feeds/posts/default?alt=json&max-results=50`;
       const data = await fetchWithProxy(blogUrl, controller.signal);
 
-      const entries = data.feed.entry || [];
+      const entries = data.feed?.entry || data.entry || [];
       const parsed: Article[] = entries.map((entry: any) => {
         const contentStr = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : "");
         const pubDate = new Date(entry.published.$t);
@@ -178,7 +225,7 @@ const Actus: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-2 animate-fade-in">
       {/* EN-TÊTE AVEC BOUTON BLOG ÉPURÉ */}
       <div className="flex flex-col bg-white p-4 rounded-2xl border border-slate-200 shadow-sm gap-4">
         <div className="flex items-center justify-between w-full">
@@ -199,10 +246,82 @@ const Actus: React.FC = () => {
           </a>
         </div>
         
-        <button onClick={() => fetchArticles(true)} className="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors active:scale-[0.99]">
-          Actualiser
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => fetchArticles(true)} className="flex-1 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors active:scale-[0.99]">
+            Actualiser
+          </button>
+          <button 
+            onClick={() => setShowHelp(true)}
+            className="px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-blue-100 transition-colors active:scale-[0.99]"
+            title="Aide"
+          >
+            <i className="fa-solid fa-circle-info mr-1"></i> Aide
+          </button>
+        </div>
       </div>
+
+      {/* POPUP D'AIDE */}
+      {showHelp && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-[2rem] shadow-2xl max-w-sm w-full overflow-hidden animate-scale-in">
+            <div className="p-8 text-center space-y-6">
+              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto text-2xl">
+                <i className="fa-solid fa-circle-info"></i>
+              </div>
+              <div className="space-y-3">
+                <h4 className="font-black text-slate-900 text-sm uppercase tracking-widest">Conseils d'utilisation</h4>
+                <p className="text-slate-600 text-xs leading-relaxed">
+                  Attendre un peu pour le chargement des actualités, sinon actualiser. 
+                  Si les actualités ne s'affichent pas, cliquer sur <span className="font-bold text-slate-900">BLOG</span> en haut à droite.
+                </p>
+                <p className="text-slate-400 text-[10px] italic leading-relaxed">
+                  (ne pas hésiter à supprimer le cache de l'application pour optimiser l'affichage)
+                </p>
+              </div>
+              <button 
+                onClick={() => setShowHelp(false)}
+                className="w-full py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-95 shadow-xl shadow-slate-200"
+              >
+                J'ai compris
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {error && articles.length === 0 && (
+        <div className="bg-red-50 border border-red-100 p-8 rounded-[2rem] text-center space-y-6 animate-fade-in">
+          <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner">
+            <i className="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div className="space-y-2">
+            <h4 className="font-black text-slate-900 text-sm uppercase tracking-widest">Erreur de connexion</h4>
+            <p className="text-slate-500 text-[10px] max-w-xs mx-auto leading-relaxed">
+              Le flux Blogger est actuellement inaccessible via nos serveurs de secours. 
+              Veuillez réessayer ou consulter directement le blog.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 max-w-xs mx-auto">
+            <button 
+              onClick={() => {
+                localStorage.removeItem(CACHE_KEY);
+                fetchArticles(true);
+              }}
+              className="w-full py-4 bg-red-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-700 transition-all active:scale-95 shadow-xl shadow-red-200"
+            >
+              Forcer la synchronisation
+            </button>
+            <a 
+              href="https://bia-acp.blogspot.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full py-3 bg-white border border-slate-200 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all"
+            >
+              Ouvrir le Blog externe
+            </a>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {loading && articles.length === 0 ? [1,2,3,4,5,6].map(i => <div key={i} className="bg-white h-80 rounded-[2rem] border border-slate-200 animate-pulse"></div>) :

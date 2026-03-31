@@ -78,21 +78,21 @@ const Cours: React.FC = () => {
         </div>
       </a>
 
-      {/* ENCART : INFORMATIONS ET INSCRIPTIONS */}
+      {/* ENCART : INFORMATIONS & INSCRIPTIONS */}
       <a 
         href="https://drive.google.com/drive/folders/1dAqKwP94pzw5LyX3TLM1Ryz_98R4Dp7Q"
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-white border-2 border-blue-50 rounded-2xl p-4 flex items-center shadow-sm hover:border-blue-200 hover:shadow-md transition-all active:scale-[0.98] group"
+        className="bg-red-50 border-2 border-red-100 rounded-2xl p-4 flex items-center shadow-sm hover:border-red-200 hover:shadow-md transition-all active:scale-[0.98] group"
       >
-        <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg mr-4 group-hover:scale-110 transition-transform">
+        <div className="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-lg mr-4 group-hover:scale-110 transition-transform">
           <i className="fa-solid fa-file-pen"></i>
         </div>
         <div className="flex-1">
-          <h4 className="font-bold text-slate-900 text-sm">Informations et inscriptions</h4>
-          <p className="text-[10px] text-blue-500 font-bold uppercase tracking-tighter">Dossier d'inscription BIA</p>
+          <h4 className="font-bold text-slate-900 text-sm">Informations & inscriptions</h4>
+          <p className="text-[10px] text-red-500 font-bold uppercase tracking-tighter">DOCUMENTS DIVERS</p>
         </div>
-        <i className="fa-solid fa-chevron-right text-slate-300 group-hover:text-blue-500 transition-colors"></i>
+        <i className="fa-solid fa-chevron-right text-slate-300 group-hover:text-red-500 transition-colors"></i>
       </a>
 
       {/* LISTE DES MODULES AVEC LIENS SPÉCIFIQUES */}
