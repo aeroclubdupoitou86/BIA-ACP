@@ -5,6 +5,7 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/(logo.*|manifest.json|sw.js|favicon.ico)", "destination": "/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
